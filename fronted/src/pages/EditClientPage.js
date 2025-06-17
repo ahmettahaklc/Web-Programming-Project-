@@ -1,10 +1,10 @@
-// src/pages/EditClientPage.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 function EditClientPage() {
-  const { id } = useParams(); // URL'den id'yi al
+  const { id } = useParams();
   const navigate = useNavigate();
+  const formRef = useRef(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -14,7 +14,6 @@ function EditClientPage() {
   });
 
   useEffect(() => {
-    // Buraya gerçek backend çağrısı gelebilir.
     const clientFromServer = {
       id,
       name: "Mock İsim",
@@ -24,6 +23,26 @@ function EditClientPage() {
     };
     setFormData(clientFromServer);
   }, [id]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (formRef.current) {
+      observer.observe(formRef.current);
+    }
+
+    return () => {
+      if (formRef.current) observer.unobserve(formRef.current);
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,9 +57,9 @@ function EditClientPage() {
   };
 
   return (
-    <div className="container">
+    <div className="container mt-4">
       <h2>Müvekkil Bilgilerini Düzenle</h2>
-      <form onSubmit={handleSubmit}>
+      <form ref={formRef} onSubmit={handleSubmit} className="fade-slide-form">
         <div className="mb-3">
           <label>İsim</label>
           <input type="text" name="name" className="form-control" value={formData.name} onChange={handleChange} required />

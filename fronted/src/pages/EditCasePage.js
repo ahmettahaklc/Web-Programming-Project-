@@ -1,21 +1,19 @@
-// src/pages/EditClientPage.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 function EditClientPage() {
-  const { id } = useParams(); // URL'den id'yi al
+  const { id } = useParams();
   const navigate = useNavigate();
+  const formRef = useRef(null);
 
   const [formData, setFormData] = useState({
-    caseTitle: '',
-    client: '',
-    court: '',
-    startDate: '',
-    caseSituation: ''
+    name: '',
+    surname: '',
+    phone: '',
+    email: ''
   });
 
   useEffect(() => {
-    // Buraya gerçek backend çağrısı gelebilir.
     const clientFromServer = {
       id,
       name: "Mock İsim",
@@ -25,6 +23,24 @@ function EditClientPage() {
     };
     setFormData(clientFromServer);
   }, [id]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    const el = formRef.current;
+    if (el) observer.observe(el);
+
+    return () => {
+      if (el) observer.unobserve(el);
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,31 +55,29 @@ function EditClientPage() {
   };
 
   return (
-    <div className="container">
-      <h2>Müvekkil Bilgilerini Düzenle</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label>Case Title</label>
-          <input type="text" name="name" className="form-control" value={formData.name} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label>Client</label>
-          <input type="text" name="surname" className="form-control" value={formData.surname} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label>Court</label>
-          <input type="text" name="phone" className="form-control" value={formData.phone} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label>Start Date</label>
-          <input type="email" name="email" className="form-control" value={formData.email} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label>Case Situation</label>
-          <input type="email" name="email" className="form-control" value={formData.email} onChange={handleChange} required />
-        </div>
-        <button type="submit" className="btn btn-primary">Kaydet</button>
-      </form>
+    <div className="container mt-4">
+      <div ref={formRef} className="form-container">
+        <h2>Müvekkil Bilgilerini Düzenle</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label>İsim</label>
+            <input type="text" name="name" className="form-control" value={formData.name} onChange={handleChange} required />
+          </div>
+          <div className="mb-3">
+            <label>Soyisim</label>
+            <input type="text" name="surname" className="form-control" value={formData.surname} onChange={handleChange} required />
+          </div>
+          <div className="mb-3">
+            <label>Telefon</label>
+            <input type="text" name="phone" className="form-control" value={formData.phone} onChange={handleChange} required />
+          </div>
+          <div className="mb-3">
+            <label>Email</label>
+            <input type="email" name="email" className="form-control" value={formData.email} onChange={handleChange} required />
+          </div>
+          <button type="submit" className="btn btn-primary">Kaydet</button>
+        </form>
+      </div>
     </div>
   );
 }

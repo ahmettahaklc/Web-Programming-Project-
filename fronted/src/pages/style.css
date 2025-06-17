@@ -169,6 +169,83 @@
     transform: translateY(0);
   }
   
+  .dashboard-container {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-in-out;
+  }
+  
+  .dashboard-container.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .case-management-container {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-in-out;
+  }
+  
+  .case-management-container.active {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+  .client-management-container {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-in-out;
+  }
+  
+  .client-management-container.active {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+  .form-container {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease-in-out;
+  }
+  
+  .form-container.active {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+  .form-container {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease-in-out;
+  }
+  
+  .form-container.active {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+  .form-container {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease-in-out;
+  }
+  
+  .form-container.active {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+  .fade-slide-form {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+  
+  .fade-slide-form.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   :root{
     font-size: 16px;
 }

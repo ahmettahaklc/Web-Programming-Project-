@@ -1,5 +1,4 @@
-// src/pages/AddCasePage.js
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 function AddCasePage() {
   const [formData, setFormData] = useState({
@@ -9,6 +8,25 @@ function AddCasePage() {
     startDate: '',
     caseSituation: '' 
   });
+
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    const el = formRef.current;
+    if (el) observer.observe(el);
+    return () => {
+      if (el) observer.unobserve(el);
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,37 +38,74 @@ function AddCasePage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("New Lawsuit:", formData);
+    console.log("New Case:", formData);
+    alert("Dava başarıyla oluşturuldu!");
     // Buraya API'ye POST işlemi eklenecek
-    alert("Case is created succesfully");
   };
 
   return (
-    <div className="container">
-      <h2>New Case Create</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">  
-          <label>Case Title</label>
-          <input type="text" name="name" className="form-control" value={formData.name} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label>Client</label>
-          <input type="text" name="surname" className="form-control" value={formData.surname} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label>Court</label>
-          <input type="text" name="phone" className="form-control" value={formData.phone} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label>Start Date</label>
-          <input type="email" name="email" className="form-control" value={formData.email} onChange={handleChange} required />
-        </div>
-        <div className="mb-3">
-          <label>Case Situation</label>
-          <input type="email" name="email" className="form-control" value={formData.email} onChange={handleChange} required />
-        </div>
-        <button type="submit" className="btn btn-success">Kaydet</button>
-      </form>
+    <div className="container mt-4">
+      <div ref={formRef} className="form-container">
+        <h2>Yeni Dava Oluştur</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">  
+            <label>Dava Başlığı</label>
+            <input
+              type="text"
+              name="caseTitle"
+              className="form-control"
+              value={formData.caseTitle}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label>Müvekkil</label>
+            <input
+              type="text"
+              name="client"
+              className="form-control"
+              value={formData.client}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label>Mahkeme</label>
+            <input
+              type="text"
+              name="court"
+              className="form-control"
+              value={formData.court}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label>Açılış Tarihi</label>
+            <input
+              type="date"
+              name="startDate"
+              className="form-control"
+              value={formData.startDate}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label>Dava Durumu</label>
+            <input
+              type="text"
+              name="caseSituation"
+              className="form-control"
+              value={formData.caseSituation}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-success">Kaydet</button>
+        </form>
+      </div>
     </div>
   );
 }

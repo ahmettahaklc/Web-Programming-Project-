@@ -1,7 +1,31 @@
-import React from "react";
+
+import React, { useEffect, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Dashboard = () => {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const target = containerRef.current;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        } else {
+          entry.target.classList.remove("active");
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (target) observer.observe(target);
+
+    return () => {
+      if (target) observer.unobserve(target);
+    };
+  }, []);
+
   const stats = [
     { title: "Toplam Dava", count: 14, bg: "primary" },
     { title: "Aktif Dava", count: 6, bg: "success" },
@@ -14,7 +38,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="container mt-4">
+    <div ref={containerRef} className="container mt-4 dashboard-container">
       <h2>Dashboard</h2>
 
       {/* İstatistik Kartları */}

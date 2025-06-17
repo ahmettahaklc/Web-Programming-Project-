@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function CaseManagementPage() {
   const [cases, setCases] = useState([]);
   const navigate = useNavigate();
+  const pageRef = useRef(null);
 
   useEffect(() => {
     const fetchCases = async () => {
@@ -29,6 +30,23 @@ function CaseManagementPage() {
     };
 
     fetchCases();
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        entry.isIntersecting
+          ? entry.target.classList.add("active")
+          : entry.target.classList.remove("active");
+      },
+      { threshold: 0.3 }
+    );
+
+    const el = pageRef.current;
+    if (el) observer.observe(el);
+
+    return () => {
+      if (el) observer.unobserve(el);
+    };
+
   }, []);
 
   const handleDelete = (id) => {
@@ -44,7 +62,7 @@ function CaseManagementPage() {
   };
 
   return (
-    <div>
+    <div ref={pageRef} className="case-management-container container mt-4">
       <h2>Dava Yönetimi</h2>
       <button className="btn btn-success my-2" onClick={handleAddClick}>Yeni Dava Ekle</button>
       <table className="table table-bordered">
